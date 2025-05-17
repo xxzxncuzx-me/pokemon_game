@@ -31,7 +31,7 @@ Stats (e.g., HP, Attack, Speed)
 To run the project locally:
 
 git clone https://github.com/xxzxncuzx-me/pokemon_game.git
-cd whos-that-pokemon
+cd pokemon_game
 flutter pub get
 flutter run
 

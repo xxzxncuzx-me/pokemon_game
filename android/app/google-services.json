@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "231020898281",
+    "project_id": "pokemon-game-7deea",
+    "storage_bucket": "pokemon-game-7deea.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231020898281:android:7b3db9c13e9730d4b58d78",
+        "android_client_info": {
+          "package_name": "com.xxzxncuzx.pokemon_game"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDh6XgWWhpvT4CfWARUq4y5XSjWZ4RAH80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

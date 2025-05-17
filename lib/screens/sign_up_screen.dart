@@ -43,24 +43,36 @@ class SignUpScreen extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Enter All The Fields")),
                   );
-                } else {
-                  try {
-                    await FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
-                          email: mail,
-                          password: pass,
-                        )
-                        .then((value) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => StartGameScreen(),
-                            ),
-                          );
-                        });
-                  } catch (err) {
-                    print(err);
+                  return;
+                }
+                try {
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                    email: mail,
+                    password: pass,
+                  );
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => StartGameScreen()),
+                  );
+                } on FirebaseAuthException catch (e) {
+                  String message = "Registration failed. Please try again.";
+
+                  if (e.code == 'email-already-in-use') {
+                    message = "This email is already registered.";
+                  } else if (e.code == 'invalid-email') {
+                    message = "Invalid email format.";
+                  } else if (e.code == 'weak-password') {
+                    message = "Password should be at least 6 characters.";
                   }
+
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message)));
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Something went wrong. Try again.")),
+                  );
                 }
               },
               style: ElevatedButton.styleFrom(

@@ -35,7 +35,7 @@ class LoginScreen extends StatelessWidget {
 
             SizedBox(height: 35),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 String mail = emailController.text.trim();
                 String pass = passController.text.trim();
 
@@ -43,21 +43,37 @@ class LoginScreen extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Enter All The Fields")),
                   );
-                } else {
-                  try {
-                    FirebaseAuth.instance
-                        .signInWithEmailAndPassword(email: mail, password: pass)
-                        .then((value) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => StartGameScreen(),
-                            ),
-                          );
-                        });
-                  } catch (err) {
-                    print(err);
+                  return;
+                }
+                try {
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: mail,
+                    password: pass,
+                  );
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => StartGameScreen()),
+                  );
+                } on FirebaseAuthException catch (e) {
+                  String message = "Wrong email or password";
+
+                  if (e.code == 'user-not-found') {
+                    message = "No user found with that email.";
+                  } else if (e.code == 'wrong-password') {
+                    message = "Incorrect password.";
+                  } else if (e.code == 'invalid-email') {
+                    message = "Invalid email format.";
                   }
+
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message)));
+                } catch (e) {
+                  // Інші помилки (наприклад, проблеми з мережею)
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Login failed. Please try again.")),
+                  );
                 }
               },
               style: ElevatedButton.styleFrom(
